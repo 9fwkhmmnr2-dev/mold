@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="theme-color" content="#111827">
+
+<title>Molde Web — Editor de plantillas</title>
+
+<style>
+
+:root {
+
+  --ink: #172033;
+
+  --muted: #667085;
+
+  --line: #e4e7ec;
+
+  --panel: #fff;
+
+  --bg: #f4f6fa;
+
+  --accent: #b88a55;
+
+}
+
+* { box-sizing: border-box; }
+
+body {
+
+  margin: 0;
+
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  color: var(--ink);
+
+  background: var(--bg);
+
+}
+
+button, input, textarea, select { font: inherit; }
+
+button { cursor: pointer; }
+
+.topbar {
+
+  min-height: 64px;
+
+  background: #111827;
+
+  color: #fff;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 20px;
+
+  gap: 12px;
+
+}
+
+.brand {
+
+  font-weight: 800;
+
+  letter-spacing: -.04em;
+
+  font-size: 20px;
+
+}
+
+.brand span { color: #d8b58b; }
+
+.top-actions {
+
+  display: flex;
+
+  gap: 8px;
+
+  align-items: center;
+
+}
+
+.btn {
+
+  border: 1px solid var(--line);
+
+  background: #fff;
+
+  color: #263043;
+
+  padding: 9px 12px;
+
+  border-radius: 10px;
+
+  font-weight: 650;
+
+  font-size: 13px;
+
+}
+
+.btn.primary {
+
+  background: #d8b58b;
+
+  color: #24190e;
+
+  border-color: #d8b58b;
+
+}
+
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.layout {
+
+  display: grid;
+
+  grid-template-columns: 330px minmax(0, 1fr);
+
+  min-height: calc(100vh - 64px);
+
+}
+
+.sidebar {
+
+  background: #fff;
+
+  border-right: 1px solid var(--line);
+
+  padding: 20px;
+
+  overflow: auto;
+
+}
+
+.eyebrow {
+
+  text-transform: uppercase;
+
+  font-size: 10px;
+
+  letter-spacing: .13em;
+
+  font-weight: 800;
+
+  color: #8b6a43;
+
+}
+
+h1 {
+
+  font-size: 22px;
+
+  letter-spacing: -.04em;
+
+  margin: 7px 0 5px;
+
+}
+
+.intro {
+
+  font-size: 13px;
+
+  color: var(--muted);
+
+  line-height: 1.5;
+
+  margin: 0 0 20px;
+
+}
+
+.field { margin: 0 0 14px; }
+
+.field label {
+
+  display: block;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  margin-bottom: 6px;
+
+}
+
+.field input[type="text"],
+
+.field input[type="tel"],
+
+.field textarea {
+
+  width: 100%;
+
+  border: 1px solid #d0d5dd;
+
+  border-radius: 9px;
+
+  padding: 10px 11px;
+
+  background: #fff;
+
+  color: var(--ink);
+
+  outline: none;
+
+}
+
+.field input:focus,
+
+.field textarea:focus {
+
+  border-color: #b88a55;
+
+  box-shadow: 0 0 0 3px #b88a5522;
+
+}
+
+.field textarea {
+
+  min-height: 72px;
+
+  resize: vertical;
+
+}
+
+.colors {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+}
+
+.color-field {
+
+  border: 1px solid var(--line);
+
+  padding: 9px;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+}
+
+.color-field input {
+
+  width: 34px;
+
+  height: 28px;
+
+  border: 0;
+
+  padding: 0;
+
+  background: transparent;
+
+}
+
+.section-list { display: grid; gap: 8px; }
+
+.section-row {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: 1px solid var(--line);
+
+  border-radius: 10px;
+
+  padding: 9px;
+
+  background: #fff;
+
+}
+
+.section-name {
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  flex: 1;
+
+}
+
+.section-name small {
+
+  display: block;
+
+  color: var(--muted);
+
+  font-weight: 500;
+
+  margin-top: 2px;
+
+}
+
+.mini {
+
+  width: 30px;
+
+  height: 30px;
+
+  border: 1px solid var(--line);
+
+  background: #fff;
+
+  border-radius: 7px;
+
+  font-weight: 800;
+
+}
+
+.mini:disabled { opacity: .3; cursor: not-allowed; }
+
+.check {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  font-size: 12px;
+
+  color: #475467;
+
+}
+
+.status {
+
+  font-size: 12px;
+
+  color: #667085;
+
+  line-height: 1.5;
+
+  margin-top: 12px;
+
+  min-height: 18px;
+
+}
+
+.workspace { padding: 22px; min-width: 0; }
+
+.workspace-head {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+
+  flex-wrap: wrap;
+
+}
+
+.workspace-head h2 { font-size: 16px; margin: 0; }
+
+.workspace-head p {
+
+  font-size: 12px;
+
+  color: var(--muted);
+
+  margin: 4px 0 0;
+
+}
+
+.device-switch {
+
+  display: flex;
+
+  gap: 5px;
+
+  background: #e8ebf1;
+
+  padding: 4px;
+
+  border-radius: 10px;
+
+}
+
+.device-switch button {
+
+  border: 0;
+
+  background: transparent;
+
+  border-radius: 7px;
+
+  padding: 7px 10px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #667085;
+
+}
+
+.device-switch button.active {
+
+  background: #fff;
+
+  color: #172033;
+
+  box-shadow: 0 1px 3px #0001;
+
+}
+
+.preview-shell {
+
+  background: #e5e9f0;
+
+  border: 1px solid #d8dde6;
+
+  border-radius: 16px;
+
+  padding: 18px;
+
+  min-height: calc(100vh - 150px);
+
+  overflow: auto;
+
+}
+
+.preview {
+
+  background: #fff;
+
+  margin: 0 auto;
+
+  max-width: 100%;
+
+  min-height: 680px;
+
+  box-shadow: 0 8px 28px #17203312;
+
+  transition: max-width .2s;
+
+  overflow: hidden;
+
+}
+
+.preview.mobile {
+
+  max-width: 390px;
+
+  border: 6px solid #202938;
+
+  border-radius: 25px;
+
+  min-height: 700px;
+
+}
+
+.site {
+
+  --primary: #b88a55;
+
+  --background: #f8f5f0;
+
+  --text: #1e232b;
+
+  color: var(--text);
+
+  background: var(--background);
+
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+.site-section { position: relative; }
+
+.site-section[hidden] { display: none !important; }
+
+.site-nav {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  padding: 20px 5%;
+
+  border-bottom: 1px solid #0002;
+
+}
+
+.site-logo {
+
+  font-size: 16px;
+
+  font-weight: 900;
+
+  letter-spacing: .04em;
+
+}
+
+.site-logo b { color: var(--primary); }
+
+.nav-link {
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: var(--text);
+
+  text-decoration: none;
+
+}
+
+.hero {
+
+  padding: 76px 8%;
+
+  display: grid;
+
+  grid-template-columns: 1.2fr .8fr;
+
+  gap: 28px;
+
+  align-items: center;
+
+  background: var(--background);
+
+}
+
+.kicker {
+
+  font-size: 11px;
+
+  letter-spacing: .17em;
+
+  text-transform: uppercase;
+
+  font-weight: 800;
+
+  color: var(--primary);
+
+}
+
+.hero h1 {
+
+  font-size: clamp(34px, 5vw, 62px);
+
+  line-height: .99;
+
+  letter-spacing: -.055em;
+
+  margin: 15px 0;
+
+}
+
+.hero p {
+
+  line-height: 1.7;
+
+  color: #555;
+
+  font-size: 15px;
+
+  max-width: 510px;
+
+}
+
+.site-button {
+
+  display: inline-block;
+
+  background: var(--primary);
+
+  color: #fff;
+
+  text-decoration: none;
+
+  border: 0;
+
+  padding: 13px 18px;
+
+  border-radius: 4px;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: .03em;
+
+}
+
+.hero-art {
+
+  min-height: 280px;
+
+  background: #333d4b;
+
+  border-radius: 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #f8f5f0;
+
+  text-align: center;
+
+  padding: 25px;
+
+  position: relative;
+
+  overflow: hidden;
+
+}
+
+.hero-art::before,
+
+.hero-art::after {
+
+  content: "";
+
+  position: absolute;
+
+  border: 1px solid #ffffff20;
+
+  border-radius: 50%;
+
+  width: 220px;
+
+  height: 220px;
+
+}
+
+.hero-art::after { width: 160px; height: 160px; }
+
+.art-text { position: relative; z-index: 1; }
+
+.art-text .scissors { font-size: 45px; }
+
+.art-text strong {
+
+  display: block;
+
+  font-size: 25px;
+
+  letter-spacing: .12em;
+
+  margin-top: 12px;
+
+}
+
+.art-text span { font-size: 10px; letter-spacing: .2em; }
+
+.services, .hours, .contact { padding: 58px 8%; }
+
+.section-heading { text-align: center; margin-bottom: 28px; }
+
+.section-heading span {
+
+  font-size: 10px;
+
+  letter-spacing: .17em;
+
+  text-transform: uppercase;
+
+  font-weight: 800;
+
+  color: var(--primary);
+
+}
+
+.section-heading h2 {
+
+  font-size: 32px;
+
+  letter-spacing: -.04em;
+
+  margin: 9px 0;
+
+}
+
+.service-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 14px;
+
+}
+
+.service-card {
+
+  border: 1px solid #0002;
+
+  padding: 22px;
+
+  border-radius: 5px;
+
+  background: #ffffff80;
+
+}
+
+.service-card h3 { font-size: 16px; margin: 0 0 10px; }
+
+.service-card p {
+
+  font-size: 12px;
+
+  line-height: 1.6;
+
+  opacity: .75;
+
+  min-height: 38px;
+
+}
+
+.price {
+
+  font-size: 20px;
+
+  font-weight: 900;
+
+  color: var(--primary);
+
+}
+
+.hours { background: #f0e8df; }
+
+.hours-box {
+
+  max-width: 620px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 8px;
+
+}
+
+.hour-line {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 13px 0;
+
+  border-bottom: 1px solid #0002;
+
+  font-size: 13px;
+
+}
+
+.contact { text-align: center; }
+
+.contact p { line-height: 1.7; opacity: .75; }
+
+.contact .site-button { margin-top: 10px; }
+
+.site-footer {
+
+  padding: 20px 8%;
+
+  font-size: 11px;
+
+  text-align: center;
+
+  background: #111827;
+
+  color: #fff;
+
+}
+
+.toast {
+
+  position: fixed;
+
+  bottom: 16px;
+
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: #111827;
+
+  color: white;
+
+  padding: 11px 15px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+
+  box-shadow: 0 5px 20px #0002;
+
+  z-index: 10;
+
+  max-width: 90vw;
+
+}
+
+@media (max-width: 850px) {
+
+  .layout { grid-template-columns: 1fr; }
+
+  .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+
+  .workspace { padding: 14px; }
+
+  .preview-shell { padding: 10px; min-height: 500px; }
+
+  .preview { min-height: 650px; }
+
+  .topbar { padding: 0 12px; }
+
+  .top-actions .btn { padding: 8px; font-size: 11px; }
+
+  .hero { padding: 42px 7%; grid-template-columns: 1fr; }
+
+  .hero-art { min-height: 190px; }
+
+  .service-grid { grid-template-columns: 1fr; }
+
+  .services, .hours, .contact { padding: 42px 7%; }
+
+  .hours-box { grid-template-columns: 1fr; }
+
+  .hero h1 { font-size: 39px; }
+
+}
+
+@media (max-width: 420px) {
+
+  .topbar { height: auto; flex-wrap: wrap; padding: 10px; }
+
+  .brand { font-size: 18px; }
+
+  .top-actions { gap: 5px; }
+
+  .top-actions .btn { font-size: 10px; }
+
+  .sidebar { padding: 15px; }
+
+  .workspace-head { align-items: flex-start; }
+
+  .preview-shell { padding: 5px; }
+
+  .preview.mobile { max-width: 100%; }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+  <div class="brand">molde<span>web</span></div>
+
+  <div class="top-actions">
+
+    <button class="btn" id="resetBtn" type="button">Restablecer</button>
+
+    <button class="btn primary" id="exportBtn" type="button">
+
+      Descargar página
+
+    </button>
+
+  </div>
+
+</header>
+
+<main class="layout">
+
+  <aside class="sidebar">
+
+    <div class="eyebrow">Editor de plantilla</div>
+
+    <h1>Tu página, a tu manera.</h1>
+
+    <p class="intro">
+
+      Personalizá esta plantilla de barbería. Los cambios aparecen
+
+      en la vista previa. Esta versión guarda el borrador en este navegador.
+
+    </p>
+
+    <div class="field">
+
+      <label for="businessName">Nombre del negocio</label>
+
+      <input id="businessName" type="text" maxlength="70"
+
+        value="Norte Barber Club">
+
+    </div>
+
+    <div class="field">
+
+      <label for="tagline">Frase principal</label>
+
+      <input id="tagline" type="text" maxlength="100"
+
+        value="Tu estilo. Tu momento.">
+
+    </div>
+
+    <div class="field">
+
+      <label for="description">Descripción</label>
+
+      <textarea id="description" maxlength="350">Cortes clásicos, estilos actuales y atención al detalle. Reservá tu próximo turno y vení a renovar tu look.</textarea>
+
+    </div>
+
+    <div class="field">
+
+      <label for="whatsapp">WhatsApp (código de país, solo números)</label>
+
+      <input id="whatsapp" type="tel" inputmode="numeric"
+
+        maxlength="16" placeholder="5492211234567">
+
+    </div>
+
+    <div class="field">
+
+      <label>Colores de la página</label>
+
+      <div class="colors">
+
+        <div class="color-field">
+
+          <span>Principal</span>
+
+          <input id="primaryColor" type="color" value="#b88a55"
+
+            aria-label="Color principal">
+
+        </div>
+
+        <div class="color-field">
+
+          <span>Fondo</span>
+
+          <input id="backgroundColor" type="color" value="#f8f5f0"
+
+            aria-label="Color de fondo">
+
+        </div>
+
+        <div class="color-field">
+
+          <span>Texto</span>
+
+          <input id="textColor" type="color" value="#1e232b"
+
+            aria-label="Color de texto">
+
+        </div>
+
+        <div class="color-field">
+
+          <span>Oscuro</span>
+
+          <input id="darkColor" type="color" value="#202938"
+
+            aria-label="Color oscuro">
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="field">
+
+      <label for="servicesText">
+
+        Servicios y precios (nombre | precio | detalle, uno por línea)
+
+      </label>
+
+      <textarea id="servicesText">Corte clásico | $8.000 | Corte prolijo a tu estilo.
+
+Corte + barba | $12.000 | Un look completo.
+
+Perfilado de barba | $5.000 | Detalles y terminación.</textarea>
+
+    </div>
+
+    <div class="field">
+
+      <label for="hoursText">
+
+        Horarios (día | horario, uno por línea)
+
+      </label>
+
+      <textarea id="hoursText">Lunes a viernes | 09:00–19:00
+
+Sábado | 09:00–16:00
+
+Domingo | Cerrado</textarea>
+
+    </div>
+
+    <div class="field">
+
+      <label>Secciones: activar y ordenar</label>
+
+      <p class="intro" style="margin:0 0 9px">
+
+        Usá las flechas para cambiar el orden. Las secciones ocultas
+
+        no aparecen en la página.
+
+      </p>
+
+      <div class="section-list" id="sectionList"></div>
+
+    </div>
+
+    <div class="field">
+
+      <label class="check">
+
+        <input type="checkbox" id="showNav" checked>
+
+        Mostrar barra superior
+
+      </label>
+
+    </div>
+
+    <div class="field">
+
+      <label class="check">
+
+        <input type="checkbox" id="showFooter" checked>
+
+        Mostrar pie de página
+
+      </label>
+
+    </div>
+
+    <div class="status" id="status" role="status" aria-live="polite">
+
+      Listo para editar.
+
+    </div>
+
+  </aside>
+
+  <section class="workspace">
+
+    <div class="workspace-head">
+
+      <div>
+
+        <h2>Vista previa en vivo</h2>
+
+        <p>La página se actualiza mientras editás.</p>
+
+      </div>
+
+      <div class="device-switch" aria-label="Tamaño de vista previa">
+
+        <button type="button" class="active" id="desktopBtn">
+
+          Computadora
+
+        </button>
+
+        <button type="button" id="mobileBtn">Celular</button>
+
+      </div>
+
+    </div>
+
+    <div class="preview-shell">
+
+      <div class="preview" id="preview">
+
+        <div class="site" id="site">
+
+          <header class="site-nav site-section" data-section="nav">
+
+            <div class="site-logo">
+
+              <span data-bind="name">Norte Barber Club</span>
+
+              <b>®</b>
+
+            </div>
+
+            <a class="nav-link" href="#contact">CONTACTO ↗</a>
+
+          </header>
+
+          <section class="hero site-section" data-section="hero">
+
+            <div>
+
+              <div class="kicker">BARBERÍA · ESTILO · DETALLE</div>
+
+              <h1 data-bind="tagline">Tu estilo. Tu momento.</h1>
+
+              <p data-bind="description">
+
+                Cortes clásicos, estilos actuales y atención al detalle.
+
+              </p>
+
+              <a class="site-button" data-action="booking" href="#contact">
+
+                CONSULTAR TURNO
+
+              </a>
+
+            </div>
+
+            <div class="hero-art" aria-label="Ilustración de barbería">
+
+              <div class="art-text">
+
+                <div class="scissors">✂</div>
+
+                <strong data-bind="shortName">NORTE</strong>
+
+                <span>BARBER CLUB</span>
+
+              </div>
+
+            </div>
+
+          </section>
+
+          <section class="services site-section" data-section="services">
+
+            <div class="section-heading">
+
+              <span>NUESTRO TRABAJO</span>
+
+              <h2>Servicios</h2>
+
+            </div>
+
+            <div class="service-grid" id="serviceGrid"></div>
+
+          </section>
+
+          <section class="hours site-section" data-section="hours">
+
+            <div class="section-heading">
+
+              <span>TE ESPERAMOS</span>
+
+              <h2>Horarios</h2>
+
+            </div>
+
+            <div class="hours-box" id="hoursBox"></div>
+
+          </section>
+
+          <section class="contact site-section" data-section="contact">
+
+            <div class="section-heading">
+
+              <span>EL PRÓXIMO PASO</span>
+
+              <h2>¿Renovamos tu estilo?</h2>
+
+            </div>
+
+            <p>Escribinos para consultar disponibilidad y coordinar tu turno.</p>
+
+            <a class="site-button" data-action="booking" href="#contact">
+
+              CONSULTAR POR WHATSAPP
+
+            </a>
+
+          </section>
+
+          <footer class="site-footer site-section" data-section="footer">
+
+            © <span data-bind="year"></span>
+
+            <span data-bind="name">Norte Barber Club</span>.
+
+            Todos los derechos reservados.
+
+          </footer>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+
+(() => {
+
+  "use strict";
+
+  const STORAGE_KEY = "moldeweb-editor-v1";
+
+  const defaults = {
+
+    businessName: "Norte Barber Club",
+
+    tagline: "Tu estilo. Tu momento.",
+
+    description:
+
+      "Cortes clásicos, estilos actuales y atención al detalle. Reservá tu próximo turno y vení a renovar tu look.",
+
+    whatsapp: "",
+
+    primaryColor: "#b88a55",
+
+    backgroundColor: "#f8f5f0",
+
+    textColor: "#1e232b",
+
+    darkColor: "#202938",
+
+    servicesText:
+
+      "Corte clásico | $8.000 | Corte prolijo a tu estilo.\n" +
+
+      "Corte + barba | $12.000 | Un look completo.\n" +
+
+      "Perfilado de barba | $5.000 | Detalles y terminación.",
+
+    hoursText:
+
+      "Lunes a viernes | 09:00–19:00\n" +
+
+      "Sábado | 09:00–16:00\n" +
+
+      "Domingo | Cerrado",
+
+    showNav: true,
+
+    showFooter: true,
+
+    sections: [
+
+      { id: "hero", label: "Portada", visible: true },
+
+      { id: "services", label: "Servicios", visible: true },
+
+      { id: "hours", label: "Horarios", visible: true },
+
+      { id: "contact", label: "Contacto", visible: true }
+
+    ]
+
+  };
+
+  const ids = [
+
+    "businessName", "tagline", "description", "whatsapp",
+
+    "primaryColor", "backgroundColor", "textColor", "darkColor",
+
+    "servicesText", "hoursText", "showNav", "showFooter"
+
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  let state = loadState();
+
+  let toastTimer;
+
+  function cloneDefaults() {
+
+    return JSON.parse(JSON.stringify(defaults));
+
+  }
+
+  function loadState() {
+
+    try {
+
+      const raw = localStorage.getItem(STORAGE_KEY);
+
+      if (!raw) return cloneDefaults();
+
+      const saved = JSON.parse(raw);
+
+      const result = { ...cloneDefaults(), ...saved };
+
+      if (!Array.isArray(result.sections)) {
+
+        result.sections = cloneDefaults().sections;
+
+      }
+
+      const valid = new Set(["hero", "services", "hours", "contact"]);
+
+      const labels = {
+
+        hero: "Portada",
+
+        services: "Servicios",
+
+        hours: "Horarios",
+
+        contact: "Contacto"
+
+      };
+
+      result.sections = result.sections
+
+        .filter(section => section && valid.has(section.id))
+
+        .map(section => ({
+
+          id: section.id,
+
+          label: labels[section.id],
+
+          visible: section.visible !== false
+
+        }));
+
+      for (const section of cloneDefaults().sections) {
+
+        if (!result.sections.some(item => item.id === section.id)) {
+
+          result.sections.push({ ...section });
+
+        }
+
+      }
+
+      return result;
+
+    } catch (_) {
+
+      return cloneDefaults();
+
+    }
+
+  }
+
+  function persist() {
+
+    try {
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+      $("status").textContent =
+
+        "Borrador guardado en este navegador.";
+
+    } catch (_) {
+
+      $("status").textContent =
+
+        "No se pudo guardar. Exportá tu página como respaldo.";
+
+    }
+
+  }
+
+  function setInputValues() {
+
+    ids.forEach(id => {
+
+      const element = $(id);
+
+      if (!element) return;
+
+      if (element.type === "checkbox") {
+
+        element.checked = Boolean(state[id]);
+
+      } else {
+
+        element.value = state[id] ?? "";
+
+      }
+
+    });
+
+  }
+
+  function safeColor(value, fallback) {
+
+    return /^#[0-9a-f]{6}$/i.test(value || "")
+
+      ? value
+
+      : fallback;
+
+  }
+
+  function parseLines(text, expected) {
+
+    return String(text || "")
+
+      .split(/\r?\n/)
+
+      .map(line => line.trim())
+
+      .filter(Boolean)
+
+      .map(line => {
+
+        const parts = line.split("|").map(part => part.trim());
+
+        return Array.from(
+
+          { length: expected },
+
+          (_, index) => parts[index] || ""
+
+        );
+
+      });
+
+  }
+
+  function cleanPhone(value) {
+
+    return String(value || "").replace(/\D/g, "").slice(0, 16);
+
+  }
+
+  function bookingUrl() {
+
+    const phone = cleanPhone(state.whatsapp);
+
+    const message = encodeURIComponent(
+
+      "Hola, quisiera consultar por un turno en " +
+
+      (state.businessName || "este negocio") + "."
+
+    );
+
+    return phone
+
+      ? "https://wa.me/" + phone + "?text=" + message
+
+      : "#contact";
+
+  }
+
+  function renderSectionsList() {
+
+    const list = $("sectionList");
+
+    list.replaceChildren();
+
+    state.sections.forEach((section, index) => {
+
+      const row = document.createElement("div");
+
+      row.className = "section-row";
+
+      const checkbox = document.createElement("input");
+
+      checkbox.type = "checkbox";
+
+      checkbox.checked = section.visible;
+
+      checkbox.setAttribute(
+
+        "aria-label", "Mostrar " + section.label
+
+      );
+
+      checkbox.addEventListener("change", () => {
+
+        section.visible = checkbox.checked;
+
+        render();
+
+      });
+
+      const name = document.createElement("div");
+
+      name.className = "section-name";
+
+      name.append(document.createTextNode(section.label));
+
+      const small = document.createElement("small");
+
+      small.textContent = section.visible ? "Visible" : "Oculta";
+
+      name.append(small);
+
+      const up = document.createElement("button");
+
+      up.className = "mini";
+
+      up.type = "button";
+
+      up.textContent = "↑";
+
+      up.title = "Subir " + section.label;
+
+      up.disabled = index === 0;
+
+      up.addEventListener("click", () => moveSection(index, -1));
+
+      const down = document.createElement("button");
+
+      down.className = "mini";
+
+      down.type = "button";
+
+      down.textContent = "↓";
+
+      down.title = "Bajar " + section.label;
+
+      down.disabled = index === state.sections.length - 1;
+
+      down.addEventListener("click", () => moveSection(index, 1));
+
+      row.append(checkbox, name, up, down);
+
+      list.append(row);
+
+    });
+
+  }
+
+  function moveSection(index, delta) {
+
+    const next = index + delta;
+
+    if (next < 0 || next >= state.sections.length) return;
+
+    [
+
+      state.sections[index],
+
+      state.sections[next]
+
+    ] = [
+
+      state.sections[next],
+
+      state.sections[index]
+
+    ];
+
+    render();
+
+  }
+
+  function renderServices() {
+
+    const grid = $("serviceGrid");
+
+    grid.replaceChildren();
+
+    const services = parseLines(state.servicesText, 3).slice(0, 12);
+
+    if (!services.length) {
+
+      const message = document.createElement("p");
+
+      message.textContent = "Agregá servicios desde el editor.";
+
+      grid.append(message);
+
+      return;
+
+    }
+
+    services.forEach(([name, price, detail]) => {
+
+      const card = document.createElement("article");
+
+      card.className = "service-card";
+
+      const heading = document.createElement("h3");
+
+      heading.textContent = name || "Servicio";
+
+      const description = document.createElement("p");
+
+      description.textContent = detail || "";
+
+      const priceElement = document.createElement("div");
+
+      priceElement.className = "price";
+
+      priceElement.textContent = price || "Consultar";
+
+      card.append(heading, description, priceElement);
+
+      grid.append(card);
+
+    });
+
+  }
+
+  function renderHours() {
+
+    const box = $("hoursBox");
+
+    box.replaceChildren();
+
+    const lines = parseLines(state.hoursText, 2).slice(0, 14);
+
+    if (!lines.length) {
+
+      const message = document.createElement("p");
+
+      message.textContent = "Agregá horarios desde el editor.";
+
+      box.append(message);
+
+      return;
+
+    }
+
+    lines.forEach(([day, hour]) => {
+
+      const line = document.createElement("div");
+
+      line.className = "hour-line";
+
+      const dayElement = document.createElement("strong");
+
+      dayElement.textContent = day || "Día";
+
+      const hourElement = document.createElement("span");
+
+      hourElement.textContent = hour || "Consultar";
+
+      line.append(dayElement, hourElement);
+
+      box.append(line);
+
+    });
+
+  }
+
+  function render() {
+
+    const name = state.businessName.trim() || "Tu negocio";
+
+    $("site").style.setProperty(
+
+      "--primary",
+
+      safeColor(state.primaryColor, defaults.primaryColor)
+
+    );
+
+    $("site").style.setProperty(
+
+      "--background",
+
+      safeColor(state.backgroundColor, defaults.backgroundColor)
+
+    );
+
+    $("site").style.setProperty(
+
+      "--text",
+
+      safeColor(state.textColor, defaults.textColor)
+
+    );
+
+    document.querySelectorAll('[data-bind="name"]').forEach(element => {
+
+      element.textContent = name;
+
+    });
+
+    document.querySelectorAll('[data-bind="tagline"]').forEach(element => {
+
+      element.textContent = state.tagline.trim() || "Tu estilo. Tu momento.";
+
+    });
+
+    document.querySelectorAll('[data-bind="description"]').forEach(element => {
+
+      element.textContent = state.description.trim();
+
+    });
+
+    $("site").querySelector('[data-bind="shortName"]').textContent =
+
+      name.split(/\s+/).slice(0, 2).join(" ").toUpperCase();
+
+    document.querySelectorAll('[data-bind="year"]').forEach(element => {
+
+      element.textContent = new Date().getFullYear();
+
+    });
+
+    document.querySelectorAll('[data-action="booking"]').forEach(element => {
+
+      element.href = bookingUrl();
+
+      if (cleanPhone(state.whatsapp)) {
+
+        element.target = "_blank";
+
+        element.rel = "noopener noreferrer";
+
+        element.title = "Abrir WhatsApp para consultar";
+
+      } else {
+
+        element.removeAttribute("target");
+
+        element.removeAttribute("rel");
+
+        element.title =
+
+          "Configurá tu número de WhatsApp en el editor";
+
+      }
+
+    });
+
+    $("site").querySelector(".site-nav").hidden = !state.showNav;
+
+    $("site").querySelector(".site-footer").hidden = !state.showFooter;
+
+    const sectionElements = new Map(
+
+      [...$("site").querySelectorAll("[data-section]")]
+
+        .map(element => [element.dataset.section, element])
+
+    );
+
+    const fragment = document.createDocumentFragment();
+
+    const nav = sectionElements.get("nav");
+
+    const footer = sectionElements.get("footer");
+
+    if (nav) fragment.append(nav);
+
+    state.sections.forEach(section => {
+
+      const element = sectionElements.get(section.id);
+
+      if (element) {
+
+        element.hidden = !section.visible;
+
+        fragment.append(element);
+
+      }
+
+    });
+
+    if (footer) fragment.append(footer);
+
+    $("site").append(fragment);
+
+    renderServices();
+
+    renderHours();
+
+    renderSectionsList();
+
+    persist();
+
+  }
+
+  function readInputs() {
+
+    ids.forEach(id => {
+
+      const element = $(id);
+
+      state[id] = element.type === "checkbox"
+
+        ? element.checked
+
+        : element.value;
+
+    });
+
+    state.whatsapp = cleanPhone(state.whatsapp);
+
+  }
+
+  ids.forEach(id => {
+
+    $(id).addEventListener("input", () => {
+
+      readInputs();
+
+      render();
+
+    });
+
+    $(id).addEventListener("change", () => {
+
+      readInputs();
+
+      render();
+
+    });
+
+  });
+
+  $("desktopBtn").addEventListener("click", () => {
+
+    $("preview").classList.remove("mobile");
+
+    $("desktopBtn").classList.add("active");
+
+    $("mobileBtn").classList.remove("active");
+
+  });
+
+  $("mobileBtn").addEventListener("click", () => {
+
+    $("preview").classList.add("mobile");
+
+    $("mobileBtn").classList.add("active");
+
+    $("desktopBtn").classList.remove("active");
+
+  });
+
+  function exportDocument() {
+
+    const clone = $("site").cloneNode(true);
+
+    // Eliminar secciones ocultas de la página exportada.
+
+    clone.querySelectorAll("[hidden]").forEach(element => {
+
+      if (element.classList.contains("site-section")) {
+
+        element.remove();
+
+      } else {
+
+        element.hidden = false;
+
+      }
+
+    });
+
+    const css = `
+
+      * { box-sizing: border-box; }
+
+      body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
+
+      .site {
+
+        --primary: ${safeColor(state.primaryColor, defaults.primaryColor)};
+
+        --background: ${safeColor(state.backgroundColor, defaults.backgroundColor)};
+
+        --text: ${safeColor(state.textColor, defaults.textColor)};
+
+        color: var(--text);
+
+        background: var(--background);
+
+      }
+
+      .site-section[hidden] { display: none !important; }
+
+      .site-nav {
+
+        display: flex; align-items: center; justify-content: space-between;
+
+        gap: 15px; padding: 20px 5%; border-bottom: 1px solid #0002;
+
+      }
+
+      .site-logo { font-size: 16px; font-weight: 900; letter-spacing: .04em; }
+
+      .site-logo b, .kicker, .section-heading span { color: var(--primary); }
+
+      .nav-link { font-size: 12px; font-weight: 700; color: var(--text); text-decoration: none; }
+
+      .hero {
+
+        padding: 76px 8%; display: grid; grid-template-columns: 1.2fr .8fr;
+
+        gap: 28px; align-items: center; background: var(--background);
+
+      }
+
+      .kicker { font-size: 11px; letter-spacing: .17em; text-transform: uppercase; font-weight: 800; }
+
+      .hero h1 { font-size: clamp(34px,5vw,62px); line-height: .99; letter-spacing: -.055em; margin: 15px 0; }
+
+      .hero p, .contact p { line-height: 1.7; opacity: .78; font-size: 15px; }
+
+      .site-button {
+
+        display: inline-block; background: var(--primary); color: #fff;
+
+        text-decoration: none; padding: 13px 18px; border-radius: 4px;
+
+        font-size: 12px; font-weight: 800;
+
+      }
+
+      .hero-art {
+
+        min-height: 280px; background: ${safeColor(state.darkColor, defaults.darkColor)};
+
+        border-radius: 8px; display: flex; align-items: center;
+
+        justify-content: center; color: #f8f5f0; text-align: center; padding: 25px;
+
+      }
+
+      .scissors { font-size: 45px; }
+
+      .art-text strong { display: block; font-size: 25px; letter-spacing: .12em; margin-top: 12px; }
+
+      .art-text span { font-size: 10px; letter-spacing: .2em; }
+
+      .services, .hours, .contact { padding: 58px 8%; }
+
+      .section-heading { text-align: center; margin-bottom: 28px; }
+
+      .section-heading span { font-size: 10px; letter-spacing: .17em; text-transform: uppercase; font-weight: 800; }
+
+      .section-heading h2 { font-size: 32px; letter-spacing: -.04em; margin: 9px 0; }
+
+      .service-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+
+      .service-card { border: 1px solid #0002; padding: 22px; border-radius: 5px; background: #ffffff80; }
+
+      .service-card h3 { font-size: 16px; margin: 0 0 10px; }
+
+      .service-card p { font-size: 12px; line-height: 1.6; opacity: .75; min-height: 38px; }
+
+      .price { font-size: 20px; font-weight: 900; color: var(--primary); }
+
+      .hours { background: #f0e8df; }
+
+      .hours-box { max-width: 620px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+      .hour-line { display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: 1px solid #0002; font-size: 13px; }
+
+      .contact { text-align: center; }
+
+      .contact .site-button { margin-top: 10px; }
+
+      .site-footer { padding: 20px 8%; font-size: 11px; text-align: center; background: #111827; color: #fff; }
+
+      @media (max-width: 650px) {
+
+        .hero { padding: 42px 7%; grid-template-columns: 1fr; }
+
+        .hero-art { min-height: 190px; }
+
+        .service-grid { grid-template-columns: 1fr; }
+
+        .services, .hours, .contact { padding: 42px 7%; }
+
+        .hours-box { grid-template-columns: 1fr; }
+
+        .hero h1 { font-size: 39px; }
+
+      }
+
+    `;
+
+    // JSON.stringify protege el título frente a comillas y caracteres especiales.
+
+    const title = JSON.stringify(state.businessName || "Mi negocio");
+
+    const html =
+
+      '<!DOCTYPE html><html lang="es"><head>' +
+
+      '<meta charset="UTF-8">' +
+
+      '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+
+      '<meta name="theme-color" content="' +
+
+      safeColor(state.darkColor, defaults.darkColor) + '">' +
+
+      '<title>' + title.slice(1, -1).replace(/</g, "&lt;") + '</title>' +
+
+      '<style>' + css + '</style></head><body>' +
+
+      clone.outerHTML +
+
+      '</body></html>';
+
+    const blob = new Blob([html], {
+
+      type: "text/html;charset=utf-8"
+
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+
+    link.href = url;
+
+    link.download = "mi-pagina-molde-web.html";
+
+    document.body.append(link);
+
+    link.click();
+
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+
+    showToast("Descarga iniciada. Abrí el archivo para probar tu página.");
+
+  }
+
+  function showToast(message) {
+
+    const element = $("toast");
+
+    element.textContent = message;
+
+    element.hidden = false;
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+
+      element.hidden = true;
+
+    }, 3500);
+
+  }
+
+  $("exportBtn").addEventListener("click", exportDocument);
+
+  $("resetBtn").addEventListener("click", () => {
+
+    if (!confirm(
+
+      "¿Restablecer la plantilla? Se perderán los cambios guardados."
+
+    )) return;
+
+    state = cloneDefaults();
+
+    setInputValues();
+
+    render();
+
+    showToast("Plantilla restablecida.");
+
+  });
+
+  setInputValues();
+
+  render();
+
+})();
+
+</script>
+
+</body>
+
+</html>
