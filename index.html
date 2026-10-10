@@ -181,47 +181,56 @@ header{position:sticky;top:0;z-index:5;background:#0B1220cc;-webkit-backdrop-fil
   .panel-top .btn{padding:10px 12px}
 }
 .rowhead{margin-top:34px}
+
+/* ===== lupa, favoritos y encabezado móvil ===== */
+.nav .pill-cta{white-space:nowrap;flex:none}
+.search input{padding-right:100px}
+.clr{right:58px}
+.go{width:42px;padding:0;display:grid;place-items:center}
+.fav-title{flex:1;margin:0;font-size:20px}
+.muted{color:var(--muted);font-size:13px}
+.chip{display:inline-flex;gap:6px;align-items:center}
+@media(max-width:640px){
+  .nav .pill-nav{display:none}
+  .search input{padding-right:100px}.go{padding:0}
+  .bottom{grid-template-columns:repeat(3,1fr)}
+}
+
+/* ===== Buscador en el encabezado; las plantillas empiezan arriba ===== */
+.nav2{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:12px;padding-top:10px;padding-bottom:10px}
+.nav2 .brand{white-space:nowrap}
+.nav2 .search{margin:0;max-width:560px;width:100%;justify-self:center}
+.nav2 .search input{height:44px;padding:0 84px 0 18px;font-size:14px}
+.nav2 .go{top:4px;right:4px;width:36px;height:36px}
+.nav2 .clr{right:46px;width:26px;height:26px}
+.nav2 .pill-nav{display:flex}
+#plantillas{padding-top:6px}
+#feed>.rowhead:first-child{margin-top:12px}
+@media(max-width:640px){
+  .nav2{grid-template-columns:1fr auto;grid-template-areas:"b c" "s s";gap:10px 12px;padding-left:14px;padding-right:14px}
+  .nav2 .brand{grid-area:b}.nav2 .pill-cta{grid-area:c;padding:10px 16px}
+  .nav2 .search{grid-area:s;max-width:none}
+  .nav2 .pill-nav{display:none}
+}
 </style>
 </head>
 <body>
-<header><div class="wrap nav">
+<header><div class="wrap nav2">
   <a class="brand" href="#">market<span>Web</span></a>
+  <form class="search" id="searchForm" role="search" autocomplete="off">
+    <input id="q" type="search" maxlength="60" placeholder="Buscá plantillas o rubros" aria-label="Buscar plantillas" aria-controls="sugg" aria-expanded="false">
+    <button type="button" class="clr" id="clearQ" hidden aria-label="Borrar búsqueda">✕</button>
+    <button type="button" class="go" id="lupaBtn" aria-label="Abrir búsqueda y filtros"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+    <div class="sugg" id="sugg" hidden></div>
+  </form>
   <nav class="pill-nav" aria-label="Principal">
-    <a href="#plantillas">Plantillas</a><button class="linkbtn" id="rubrosNav" type="button">Rubros</button><a href="info.html#como">Cómo funciona</a>
+    <a href="info.html#como">Cómo funciona</a>
     <button class="linkbtn" id="favNav" type="button">Favoritos <span id="favCount">0</span></button>
   </nav>
   <a class="btn pill-cta" href="#plantillas">Crear mi web</a>
 </div></header>
 <main>
-<div class="hero">
-  <div class="wrap">
-    <span class="badge">Plantillas listas para editar</span>
-    <h1>Tu página web, lista en minutos.</h1>
-    <p>Elegí una plantilla, editala gratis y mirá cómo queda. Pagás solo cuando te gusta y querés descargarla.</p>
-    <form class="search" id="searchForm" role="search" autocomplete="off">
-      <input id="q" type="search" maxlength="60" placeholder="Probá: «web para barbería» o «negro y azul»" aria-label="Buscar plantillas" aria-controls="sugg" aria-expanded="false">
-      <button type="button" class="clr" id="clearQ" hidden aria-label="Borrar búsqueda">✕</button>
-      <button type="submit" class="go">Buscar</button>
-      <div class="sugg" id="sugg" hidden></div>
-    </form>
-    <a class="btn glass" href="#plantillas">Explorar plantillas</a>
-  </div>
-  <div class="stage" aria-hidden="true">
-    <div class="halo"></div>
-    <div class="mock"><div class="mock-bar"><i></i><i></i><i></i></div>
-      <div class="mock-body">
-        <div class="mock-side"><small>Editor</small><div class="mock-field">Norte Barber Club</div><div class="mock-field">Tu estilo. Tu momento.</div>
-          <small>Colores</small><div class="mock-sw"><i style="background:#b88a55"></i><i style="background:#f8f5f0"></i><i style="background:#1e232b"></i><i style="background:#202938"></i></div>
-          <small>Tipografía</small><div class="mock-field">Clásica</div></div>
-        <div class="mock-site"><div class="ms-nav"><b>Norte Barber Club</b><span>CONTACTO</span></div><h4>Tu estilo.<br>Tu momento.</h4><span class="ms-btn">CONSULTAR TURNO</span><div class="ms-cards"><i></i><i></i><i></i></div></div>
-      </div></div>
-  </div>
-</div>
-
-<section id="plantillas"><div class="wrap">
-  <h2>Plantillas</h2><p class="sub">Deslizá para verlas todas. Para filtrar por rubro o estilo, tocá «Buscar».</p>
-  <div id="feed"></div>
-</div></section>
+<section id="plantillas"><div class="wrap"><div id="feed"></div></div></section>
 </main>
 
 <footer><div class="wrap"><span>© <span id="year"></span> marketWeb</span><span><a href="info.html#faq">Preguntas frecuentes</a> · Términos · Privacidad · Contacto</span></div></footer>
@@ -231,15 +240,18 @@ header{position:sticky;top:0;z-index:5;background:#0B1220cc;-webkit-backdrop-fil
     <form class="search p" id="pForm" role="search" autocomplete="off">
       <input id="pq" type="search" maxlength="60" placeholder="Buscar plantillas" aria-label="Buscar plantillas" aria-controls="pSugg" aria-expanded="false">
       <button type="button" class="clr" id="pClear" hidden aria-label="Borrar búsqueda">✕</button>
-      <button type="submit" class="go">Buscar</button>
+      <button type="submit" class="go" aria-label="Buscar"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
       <div class="sugg" id="pSugg" hidden></div>
     </form>
+    <h2 id="favTitle" class="fav-title" hidden>Favoritos</h2>
     <button class="btn alt" id="closePanel" type="button">Cerrar</button>
   </div>
-  <h4 class="ph">Rubros</h4><div class="cats" id="cats"></div>
-  <h4 class="ph">Estilo y funciones</h4><div class="bar" id="tagChips" role="group" aria-label="Estilo y funciones"></div>
-  <div class="bar"><select id="sort" aria-label="Ordenar por"><option value="rel">Relevancia</option><option value="ready">Disponibles primero</option><option value="name">Nombre (A–Z)</option></select>
-    <button class="chip" id="clearAll" type="button" hidden>Limpiar filtros</button></div>
+  <div id="filters">
+    <h4 class="ph">Rubros</h4><div class="bar" id="cats"></div>
+    <h4 class="ph">Precios</h4><div class="bar" id="priceChips" role="group" aria-label="Precios"></div>
+    <h4 class="ph">Recientes</h4><div class="bar" id="recentBox"></div>
+    <div class="bar"><button class="chip" id="clearAll" type="button" hidden>Limpiar filtros</button></div>
+  </div>
   <h3 id="resTitle" aria-live="polite"></h3>
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty" hidden><p id="emptyMsg"></p><button class="btn" id="emptyClear" type="button">Limpiar filtros</button></div>
@@ -248,7 +260,7 @@ header{position:sticky;top:0;z-index:5;background:#0B1220cc;-webkit-backdrop-fil
 <script>
 (() => {
 "use strict";
-const PRICE = "US$ 0,90";
+/* Precios: editá DEFAULT/price de cada plantilla y los rangos de PRICE_FILTERS cuando cambien */
 const T = [
   { name:"Barbería", cat:"Servicios", desc:"Servicios, precios, horarios y turnos por WhatsApp.", c:["#f8f5f0","#b88a55","#202938"], tags:["Clásica","Turnos"], keys:"beige dorado peluqueria whatsapp horarios precios", ready:true },
   { name:"Restaurante", cat:"Gastronomía", desc:"Carta, fotos, horarios y botón para reservar.", c:["#fff7ed","#c2410c","#3b1d0e"], tags:["Cálida","Reservas"], keys:"naranja carta menu comida", ready:false },
@@ -258,14 +270,22 @@ const T = [
   { name:"Portfolio", cat:"Personal", desc:"Proyectos, sobre mí y contacto.", c:["#fafafa","#7c3aed","#1e1033"], tags:["Minimalista","Creativa"], keys:"violeta proyectos curriculum cv", ready:false },
   { name:"Agenda de turnos", cat:"Agendas", desc:"Página para que tus clientes pidan turno.", c:["#fff8f1","#ea580c","#2a160b"], tags:["Moderna","Turnos"], keys:"naranja citas reservas", ready:false },
   { name:"Gimnasio", cat:"Servicios", desc:"Planes, horarios de clases y contacto.", c:["#16181d","#dc2626","#f6f7f9"], tags:["Oscura","Deportiva"], keys:"rojo negro clases planes deportes", ready:false }
+].map(t => ({ price: 0.9, ...t }));
+const PRICE_FILTERS = [
+  { label:"Gratis", test:p => p === 0 },
+  { label:"Hasta US$ 1", test:p => p <= 1 },
+  { label:"Hasta US$ 5", test:p => p <= 5 },
+  { label:"Más de US$ 5", test:p => p > 5 }
 ];
+const fmt = p => p === 0 ? "Gratis" : "US$ " + p.toFixed(2).replace(".", ",");
 const ICONS = { "Servicios":"✂️", "Gastronomía":"🍽️", "Comercio":"🛍️", "Personal":"🎨", "Agendas":"📅" };
 const PHRASES = ["Web para barbería","Tienda de ropa moderna","Diseño negro y azul","Portfolio minimalista","Web para restaurante","Página para vender servicios"];
 const STOP = new Set("web webs pagina paginas para de del la el los las un una y con plantilla plantillas diseno disenos sitio en".split(" "));
 const CATS = [...new Set(T.map(t => t.cat))];
 const TAGS = [...new Set(T.flatMap(t => t.tags))];
-const RESET = { q:"", cat:"Todas", tag:"Todas", ready:false, favs:false };
-const S = { ...RESET, sort:"rel" };
+const RESET = { q:"", cat:"Todas", price:"Todos" };
+const S = { ...RESET };
+let mode = "search";
 const $ = id => document.getElementById(id);
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
 const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -281,13 +301,12 @@ function score(t) {
   const h = norm([t.name, t.cat, t.desc, t.keys, ...t.tags].join(" "));
   return ws.reduce((n, w) => n + (h.includes(w) ? 1 : 0), 0);
 }
-const filtered = () => Boolean(S.q.trim()) || S.cat !== "Todas" || S.tag !== "Todas" || S.ready || S.favs;
+const filtered = () => Boolean(S.q.trim()) || S.cat !== "Todas" || S.price !== "Todos";
 function list() {
-  const r = T.filter(t => score(t) > 0 && (S.cat === "Todas" || t.cat === S.cat) && (S.tag === "Todas" || t.tags.includes(S.tag)) && (!S.ready || t.ready) && (!S.favs || favs.includes(t.name)));
-  if (S.sort === "name") r.sort((a, b) => a.name.localeCompare(b.name, "es"));
-  else if (S.sort === "ready") r.sort((a, b) => b.ready - a.ready);
-  else r.sort((a, b) => score(b) - score(a) || b.ready - a.ready);
-  return r;
+  if (mode === "favs") return T.filter(t => favs.includes(t.name));
+  const pf = PRICE_FILTERS.find(f => f.label === S.price);
+  return T.filter(t => score(t) > 0 && (S.cat === "Todas" || t.cat === S.cat) && (!pf || pf.test(t.price)))
+    .sort((a, b) => score(b) - score(a) || b.ready - a.ready);
 }
 function thumb(c) {
   const t = el("div", "thumb"); t.style.background = c[0];
@@ -305,7 +324,7 @@ function syncFavs() {
     b.textContent = on ? "♥" : "♡"; b.setAttribute("aria-pressed", String(on));
   });
   $("favCount").textContent = favs.length;
-  if (!panel.hidden && S.favs) renderPanel();
+  if (!panel.hidden && mode === "favs") renderPanel();
 }
 function card(t) {
   const c = el("article", "card"), th = thumb(t.c);
@@ -323,22 +342,15 @@ function card(t) {
   const tg = el("div", "tags"); [t.cat, ...t.tags].forEach(x => tg.append(el("span", null, x)));
   body.append(tg, el("p", null, t.desc));
   const meta = el("div", "meta");
-  meta.append(el("span", "price", PRICE), el("span", "tag" + (t.ready ? "" : " soon"), t.ready ? "Disponible" : "Pronto"));
+  meta.append(el("span", "price", fmt(t.price)), el("span", "tag" + (t.ready ? "" : " soon"), t.ready ? "Disponible" : "Pronto"));
   const act = el("div", "actions"); let go;
   if (t.ready) { go = el("a", "btn", "Probar gratis"); go.href = "editor.html?plantilla=" + encodeURIComponent(norm(t.name)); }
   else { go = el("button", "btn", "Próximamente"); go.type = "button"; go.disabled = true; }
   act.append(go); body.append(meta, act); c.append(body); return c;
 }
-function chips(box, items, current, onPick) {
-  box.replaceChildren();
-  items.forEach(x => {
-    const b = el("button", "chip", x); b.type = "button"; b.setAttribute("aria-pressed", String(x === current));
-    b.addEventListener("click", () => onPick(x)); box.append(b);
-  });
-}
-function toggleChip(box, label, on, fn) {
+function chip(label, on, fn) {
   const b = el("button", "chip", label); b.type = "button"; b.setAttribute("aria-pressed", String(on));
-  b.addEventListener("click", fn); box.append(b);
+  b.addEventListener("click", fn); return b;
 }
 
 /* ---- Portada: solo scroll de plantillas ---- */
@@ -352,55 +364,52 @@ function renderFeed() {
   });
 }
 
-/* ---- Panel de búsqueda: rubros, filtros y resultados ---- */
+/* ---- Panel: búsqueda (rubros, precios, recientes) o favoritos ---- */
 function renderPanel() {
-  const cats = $("cats"); cats.replaceChildren();
-  CATS.forEach(c => {
-    const n = T.filter(t => t.cat === c).length;
-    const b = el("button", "cat"); b.type = "button"; b.setAttribute("aria-pressed", String(S.cat === c));
-    b.append(el("span", "ico", ICONS[c] || "✨"), el("b", null, c), el("span", null, n + (n === 1 ? " plantilla" : " plantillas")));
-    b.addEventListener("click", () => { S.cat = S.cat === c ? "Todas" : c; renderPanel(); });
-    cats.append(b);
-  });
-  const tb = $("tagChips");
-  chips(tb, TAGS, S.tag, x => { S.tag = S.tag === x ? "Todas" : x; renderPanel(); });
-  toggleChip(tb, "Solo disponibles", S.ready, () => { S.ready = !S.ready; renderPanel(); });
-  toggleChip(tb, "♥ Favoritos (" + favs.length + ")", S.favs, () => { S.favs = !S.favs; renderPanel(); });
-  $("clearAll").hidden = !filtered();
+  const fm = mode === "favs";
+  $("pForm").hidden = fm; $("favTitle").hidden = !fm; $("filters").hidden = fm;
+  if (!fm) {
+    const cats = $("cats"); cats.replaceChildren();
+    CATS.forEach(c => cats.append(chip((ICONS[c] || "✨") + " " + c, S.cat === c, () => { S.cat = S.cat === c ? "Todas" : c; renderPanel(); })));
+    const pr = $("priceChips"); pr.replaceChildren();
+    PRICE_FILTERS.forEach(f => pr.append(chip(f.label, S.price === f.label, () => { S.price = S.price === f.label ? "Todos" : f.label; renderPanel(); })));
+    const rb = $("recentBox"); rb.replaceChildren();
+    if (!recent.length) rb.append(el("span", "muted", "Todavía no buscaste nada."));
+    else {
+      recent.forEach(x => rb.append(chip("🕘 " + x, false, () => runSearch(x))));
+      const d = el("button", "seeall", "Borrar"); d.type = "button";
+      d.addEventListener("click", () => { recent = []; save("mw-recent", recent); renderPanel(); }); rb.append(d);
+    }
+    $("clearAll").hidden = !filtered();
+  }
   const r = list(), grid = $("grid"); grid.replaceChildren(); r.forEach(t => grid.append(card(t)));
-  $("resTitle").textContent = r.length + (r.length === 1 ? " plantilla" : " plantillas") + (S.q.trim() ? " para «" + S.q.trim() + "»" : "");
-  $("empty").hidden = r.length > 0;
-  $("emptyMsg").textContent = S.favs && !favs.length ? "Todavía no guardaste favoritos. Tocá el corazón de una plantilla para guardarla."
+  $("resTitle").textContent = fm ? "Tus favoritos (" + r.length + ")"
+    : r.length + (r.length === 1 ? " plantilla" : " plantillas") + (S.q.trim() ? " para «" + S.q.trim() + "»" : "");
+  $("empty").hidden = r.length > 0; $("emptyClear").hidden = fm;
+  $("emptyMsg").textContent = fm ? "Todavía no guardaste favoritos. Tocá el corazón de una plantilla para guardarla."
     : "No encontramos plantillas con esa búsqueda. Probá con otras palabras (por ejemplo «barbería» o «restaurante») o quitá filtros.";
 }
 function setQ(v, src) {
   S.q = v; if (src !== hero) hero.value = v; if (src !== pq) pq.value = v;
   $("clearQ").hidden = $("pClear").hidden = !v;
 }
-function openPanel(preset, focus) {
-  Object.assign(S, preset || {}); setQ(S.q, null);
-  $("sort").value = S.sort;
+function openPanel(preset, m) {
+  mode = m || "search"; Object.assign(S, preset || {}); setQ(S.q, null);
   panel.hidden = false; document.documentElement.style.overflow = "hidden";
   if (!(history.state && history.state.mwPanel)) history.pushState({ mwPanel: 1 }, "");
-  renderPanel(); panel.scrollTop = 0; if (focus) pq.focus();
+  renderPanel(); panel.scrollTop = 0;
 }
 function hidePanel() { panel.hidden = true; document.documentElement.style.overflow = ""; closeSuggs(); }
 function closePanel() { if (history.state && history.state.mwPanel) history.back(); else hidePanel(); }
 window.addEventListener("popstate", () => { if (!panel.hidden) hidePanel(); });
 
-/* ---- Sugerencias e historial ---- */
+/* ---- Sugerencias mientras se escribe ---- */
 const boxes = [[hero, $("sugg")], [pq, $("pSugg")]];
 function closeSuggs() { boxes.forEach(([i, b]) => { b.hidden = true; i.setAttribute("aria-expanded", "false"); }); }
 function showSugg(input, box) {
-  const q = norm(input.value).trim();
-  let label = "Sugerencias", items, clear = false;
-  if (!q) { label = "Búsquedas recientes"; items = recent; clear = true; }
-  else items = [...new Set([...T.map(t => t.name), ...PHRASES, ...CATS, ...TAGS])].filter(x => norm(x).includes(q)).slice(0, 6);
-  box.replaceChildren();
-  if (!items.length) { box.hidden = true; return; }
-  const lbl = el("div", "lbl"); lbl.append(el("span", null, label));
-  if (clear) { const b = el("button", null, "Borrar historial"); b.type = "button"; b.addEventListener("click", () => { recent = []; save("mw-recent", recent); closeSuggs(); }); lbl.append(b); }
-  box.append(lbl);
+  const q = norm(input.value).trim(); box.replaceChildren();
+  const items = q ? [...new Set([...T.map(t => t.name), ...PHRASES, ...CATS, ...TAGS])].filter(x => norm(x).includes(q)).slice(0, 6) : [];
+  if (!items.length) { box.hidden = true; input.setAttribute("aria-expanded", "false"); return; }
   items.forEach(x => { const b = el("button", null, x); b.type = "button"; b.addEventListener("click", () => runSearch(x)); box.append(b); });
   box.hidden = false; input.setAttribute("aria-expanded", "true");
 }
@@ -408,7 +417,7 @@ function runSearch(text) {
   const v = String(text).trim().slice(0, 60);
   setQ(v, null); closeSuggs();
   if (v) { recent = [v, ...recent.filter(x => x !== v)].slice(0, 5); save("mw-recent", recent); }
-  openPanel({}, panel.hidden ? false : true);
+  openPanel({}, "search");
 }
 boxes.forEach(([input, box]) => {
   input.addEventListener("input", () => { setQ(input.value, input); showSugg(input, box); if (input === pq) renderPanel(); });
@@ -419,6 +428,7 @@ boxes.forEach(([input, box]) => {
 }));
 $("searchForm").addEventListener("submit", ev => { ev.preventDefault(); runSearch(hero.value); });
 $("pForm").addEventListener("submit", ev => { ev.preventDefault(); runSearch(pq.value); });
+$("lupaBtn").addEventListener("click", () => openPanel({ q: hero.value.trim().slice(0, 60) }, "search"));
 document.addEventListener("keydown", ev => {
   if (ev.key !== "Escape") return;
   if (boxes.some(([, b]) => !b.hidden)) closeSuggs(); else if (!panel.hidden) closePanel();
@@ -426,17 +436,14 @@ document.addEventListener("keydown", ev => {
 document.addEventListener("click", ev => { if (!ev.target.closest(".search")) closeSuggs(); });
 
 $("closePanel").addEventListener("click", closePanel);
-$("sort").addEventListener("change", () => { S.sort = $("sort").value; renderPanel(); });
 const resetAll = () => { setQ("", null); Object.assign(S, RESET); renderPanel(); };
 $("clearAll").addEventListener("click", resetAll);
 $("emptyClear").addEventListener("click", resetAll);
-$("rubrosNav").addEventListener("click", () => openPanel(RESET, false));
-$("favNav").addEventListener("click", () => openPanel({ ...RESET, favs:true }, false));
+$("favNav").addEventListener("click", () => openPanel({}, "favs"));
 
 const nav = el("nav", "bottom"); nav.setAttribute("aria-label", "Acceso rápido");
 const SM = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-[["Inicio", () => scrollTo({ top:0, behavior:SM })], ["Buscar", () => openPanel({}, true)],
- ["Rubros", () => openPanel(RESET, false)], ["Favoritos", () => openPanel({ ...RESET, favs:true }, false)]]
+[["Inicio", () => scrollTo({ top:0, behavior:SM })], ["Buscar", () => openPanel({}, "search")], ["Favoritos", () => openPanel({}, "favs")]]
  .forEach(([t, fn]) => { const b = el("button", null, t); b.type = "button"; b.addEventListener("click", fn); nav.append(b); });
 document.body.append(nav);
 
